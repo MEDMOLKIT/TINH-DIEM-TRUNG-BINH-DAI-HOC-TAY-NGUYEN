@@ -8,7 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<!-- THAY ĐỔI: Sử dụng Realtime Database thay vì Firestore -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
@@ -166,7 +165,6 @@
 </div>
 
 <script>
-// ================= CẤU HÌNH FIREBASE — DÁN THÔNG TIN DỰ ÁN CỦA BẠN VÀO ĐÂY =================
 const firebaseConfig = {
   apiKey: "AIzaSyDhMAzmUJyPhlC7tKwK0uJaWkH2tcdAg00",
   authDomain: "diem-tbc-tichluy.firebaseapp.com",
@@ -177,7 +175,6 @@ const firebaseConfig = {
   appId: "1:995775992847:web:8e895b52db43ee25787f7a",
   measurementId: "G-NRWW25MCPY"
 };
-// ============================================================================================
 
 let firebaseReady = false;
 let auth = null, db = null;
@@ -185,7 +182,6 @@ try{
   if(firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("DÁN")){
     firebase.initializeApp(firebaseConfig);
     auth = firebase.auth();
-    // THAY ĐỔI: Khởi tạo Realtime Database thay vì Firestore
     db = firebase.database(); 
     firebaseReady = true;
   }
@@ -324,7 +320,6 @@ function applySavedData(saved){
   state.activeId = state.semesters[0].id;
 }
 
-// THAY ĐỔI: Hàm lưu dữ liệu dùng Realtime Database
 function persist(){
   if(!currentUser || !firebaseReady) return;
   const payload = { semesters: state.semesters, major: state.major, targetGPA: state.targetGPA, futureCredits: state.futureCredits };
@@ -599,9 +594,7 @@ function renderHocBong(active, r){
           </div>
           <div class="stamp-wrap">
             <div class="stamp ${r.eligible && r.rank ? "" : "fail"}">
-              <div class="stamp-text">${r.eligible && r.rank ? `HB KKHT
-Loại ${r.rank}` : "Chưa đạt
-chuẩn xét HB"}</div>
+              <div class="stamp-text">${r.eligible && r.rank ? `HB KKHT\nLoại ${r.rank}` : "Chưa đạt\nchuẩn xét HB"}</div>
             </div>
           </div>
         </div>
@@ -638,8 +631,7 @@ chuẩn xét HB"}</div>
           <table class="suggest-table"><tbody>${rows}</tbody></table>
         </div>
         <div class="stamp-wrap">
-          <div class="stamp progress"><div class="stamp-text">Đang học kỳ,
-chưa xếp loại</div></div>
+          <div class="stamp progress"><div class="stamp-text">Đang học kỳ,\nchưa xếp loại</div></div>
         </div>
       </div>
     </div>
@@ -732,7 +724,6 @@ if(firebaseReady){
   auth.onAuthStateChanged(user=>{
     if(user){
       currentUser = user;
-      // THAY ĐỔI: Hàm đọc dữ liệu dùng Realtime Database
       db.ref("users/" + user.uid).once("value").then(snapshot=>{
         if(snapshot.exists()) applySavedData(snapshot.val());
         showApp();
